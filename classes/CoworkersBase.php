@@ -62,7 +62,7 @@ class CoworkersBase
         $args = array(
             'post_type' => self::COWORKERS_POST_TYPE,
             'orderby' => 'menu_order',
-            'order' => 'DESC',
+            'order' => 'ASC',
             'posts_per_page' => -1);
         $query = new \WP_Query($args);
         $coworkers = $query->get_posts();
