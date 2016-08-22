@@ -1,0 +1,14 @@
+{
+    "name": "vinniaab/coworkers",
+    "description": "A plugin for showing coworkers on a wordpress page",
+    "type": "vcs",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Joakim Carlsten",
+            "email": "joakim@vinnia.se"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
