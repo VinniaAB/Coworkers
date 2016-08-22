@@ -1,7 +1,7 @@
 {
     "name": "vinniaab/vinnia-coworkers",
     "description": "A plugin for showing coworkers on a wordpress page",
-    "type": "vcs",
+    "type": "wordpress-plugin",
     "license": "GPL",
     "authors": [
         {
