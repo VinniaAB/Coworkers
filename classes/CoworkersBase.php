@@ -87,17 +87,27 @@ class CoworkersBase
         return self::$instance;
     }
 
-    private function parseCoworker($post) {
-        setup_postdata($post);
-        if (has_post_thumbnail() ) {
+    private function parseCoworker(WP_Post $post) {
+        //setup_postdata($post);
+        if (has_post_thumbnail($post->ID) ) {
             $featured_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'medium');
             $thumbnail_url = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'thumbnail');
-            $title = the_title('','',false);
-            $excerpt = get_the_excerpt();
-            $content = get_the_content();
-            $permalink = get_permalink();
+            $title = get_the_title($post->ID);
+            $excerpt = get_the_excerpt($post->ID);
+            $content = $post->post_content;
+            $permalink = get_permalink($post->ID);
             if ($title) {
-                return array(
+                $coworker = new Coworker();
+                $coworker->image = $featured_image_url[0];
+                $coworker->thumbnail = $thumbnail_url[0];
+                $coworker->name = $title;
+                $coworker->position = $excerpt;
+                $coworker->content = apply_filters('the_content', $content);
+                $coworker->permalink = $permalink;
+                $coworker->post_id = $post->ID;
+
+                return $coworker;
+                /*return array(
                     "image" => $featured_image_url[0],
                     "thumbnail" => $thumbnail_url[0],
                     "caption" => array(
@@ -107,10 +117,9 @@ class CoworkersBase
                     ),
                     "permalink" => $permalink,
                     "post_id" => get_the_ID()
-                );
+                );*/
             }
         }
-        wp_reset_postdata();
         return false;
     }
 }
