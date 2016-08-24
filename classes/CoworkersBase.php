@@ -9,6 +9,8 @@
 
 namespace Vinnia\Coworkers;
 
+require_once __DIR__.'/Coworker.php';
+
 class CoworkersBase
 {
     const COWORKERS_POST_TYPE = 'vin_coworkers';
@@ -87,8 +89,7 @@ class CoworkersBase
         return self::$instance;
     }
 
-    private function parseCoworker(WP_Post $post) {
-        //setup_postdata($post);
+    private function parseCoworker(\WP_Post $post) {
         if (has_post_thumbnail($post->ID) ) {
             $featured_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'medium');
             $thumbnail_url = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'thumbnail');
@@ -107,17 +108,6 @@ class CoworkersBase
                 $coworker->post_id = $post->ID;
 
                 return $coworker;
-                /*return array(
-                    "image" => $featured_image_url[0],
-                    "thumbnail" => $thumbnail_url[0],
-                    "caption" => array(
-                        "h1" => $title,
-                        "h2" => $excerpt,
-                        "text" => apply_filters('the_content', $content)
-                    ),
-                    "permalink" => $permalink,
-                    "post_id" => get_the_ID()
-                );*/
             }
         }
         return false;
