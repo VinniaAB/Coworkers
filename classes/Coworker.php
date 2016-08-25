@@ -11,6 +11,9 @@ namespace Vinnia\Coworkers;
 
 class Coworker
 {
+    const POST_TYPE_NAME = 'vin_coworkers';
+    const OPTION_KEY_NAME = 'coworker_details';
+
     public $image;
     public $thumbnail;
     public $name;
@@ -18,4 +21,6 @@ class Coworker
     public $content;
     public $permalink;
     public $post_id;
+    public $email;
+    public $phone;
 }

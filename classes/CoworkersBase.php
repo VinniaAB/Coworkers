@@ -13,7 +13,7 @@ require_once __DIR__.'/Coworker.php';
 
 class CoworkersBase
 {
-    const COWORKERS_POST_TYPE = 'vin_coworkers';
+
     protected static $instance;
 
     /**
@@ -49,20 +49,19 @@ class CoworkersBase
                 'editor',
                 'thumbnail',
                 'revisions',
-                'excerpt',
                 'page-attributes'
             ),
             'rewrite' => array(
                 'slug' => 'coworker',
             )
         );
-        register_post_type(self::COWORKERS_POST_TYPE, $args);
+        register_post_type(Coworker::POST_TYPE_NAME, $args);
     }
 
     public function getCoworkers () {
         global $post;
         $args = array(
-            'post_type' => self::COWORKERS_POST_TYPE,
+            'post_type' => Coworker::POST_TYPE_NAME,
             'orderby' => 'menu_order',
             'order' => 'ASC',
             'posts_per_page' => -1);
@@ -72,7 +71,7 @@ class CoworkersBase
 
         if ($coworkers) {
             foreach ($coworkers as $post) :
-                $ref = $this->parseCoworker($post);
+                $ref = self::parseCoworker($post);
 
                 if ( $ref ) {
                     $return_array[] = $ref;
@@ -89,7 +88,7 @@ class CoworkersBase
         return self::$instance;
     }
 
-    private function parseCoworker(\WP_Post $post) {
+    private static function parseCoworker(\WP_Post $post) {
         if (has_post_thumbnail($post->ID) ) {
             $featured_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'medium');
             $thumbnail_url = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'thumbnail');
@@ -97,19 +96,29 @@ class CoworkersBase
             $excerpt = get_the_excerpt($post->ID);
             $content = $post->post_content;
             $permalink = get_permalink($post->ID);
+            $postMeta = get_post_meta($post->ID, Coworker::OPTION_KEY_NAME, $single = true);
             if ($title) {
                 $coworker = new Coworker();
                 $coworker->image = $featured_image_url[0];
                 $coworker->thumbnail = $thumbnail_url[0];
                 $coworker->name = $title;
-                $coworker->position = $excerpt;
                 $coworker->content = apply_filters('the_content', $content);
                 $coworker->permalink = $permalink;
                 $coworker->post_id = $post->ID;
+
+                var_dump($postMeta);
+                foreach ($postMeta as $key => $value) {
+                    $coworker->$key = $value;
+                }
 
                 return $coworker;
             }
         }
         return false;
+    }
+
+    public static function getCoworker(\WP_Post $post) : Coworker
+    {
+        return self::parseCoworker($post);
     }
 }
