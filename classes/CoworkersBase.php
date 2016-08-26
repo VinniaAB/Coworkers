@@ -100,7 +100,6 @@ class CoworkersBase
             $featured_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'coworker_image');
             $thumbnail_url = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'thumbnail');
             $title = get_the_title($post->ID);
-            $excerpt = get_the_excerpt($post->ID);
             $content = $post->post_content;
             $permalink = get_permalink($post->ID);
             $postMeta = get_post_meta($post->ID, Coworker::OPTION_KEY_NAME, $single = true);
