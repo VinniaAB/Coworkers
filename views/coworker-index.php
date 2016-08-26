@@ -13,11 +13,14 @@
      * @var \Vinnia\Coworkers\Coworker $item
      */
     foreach ($items as $item):
+        if (empty($item->image) || empty($item->name)) {
+        continue;
+        }
         ?>
         <div class="col-xs-12 col-ms-6 col-sm-4">
             <article>
 
-                <img class="img-responsive" src="<?= $item->image; ?>"/>
+                <img class="img-responsive coworker__image" src="<?= $item->image; ?>"/>
                 <div class="content">
                     <?php if (isset($item->name)): ?>
                         <h3 class="coworker__title"><?php echo $item->name; ?></h3>

@@ -23,6 +23,12 @@ class CoworkersBase
     {
     }
 
+    public function init()
+    {
+        $this->registerPostType();
+        $this->addImageSize();
+    }
+
     public function registerPostType()
     {
         $args = array(
@@ -89,8 +95,9 @@ class CoworkersBase
     }
 
     private static function parseCoworker(\WP_Post $post) {
+        $coworker = new Coworker();
         if (has_post_thumbnail($post->ID) ) {
-            $featured_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'medium');
+            $featured_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'coworker_image');
             $thumbnail_url = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'thumbnail');
             $title = get_the_title($post->ID);
             $excerpt = get_the_excerpt($post->ID);
@@ -98,15 +105,12 @@ class CoworkersBase
             $permalink = get_permalink($post->ID);
             $postMeta = get_post_meta($post->ID, Coworker::OPTION_KEY_NAME, $single = true);
             if ($title) {
-                $coworker = new Coworker();
                 $coworker->image = $featured_image_url[0];
                 $coworker->thumbnail = $thumbnail_url[0];
                 $coworker->name = $title;
                 $coworker->content = apply_filters('the_content', $content);
                 $coworker->permalink = $permalink;
                 $coworker->post_id = $post->ID;
-
-                var_dump($postMeta);
                 foreach ($postMeta as $key => $value) {
                     $coworker->$key = $value;
                 }
@@ -114,11 +118,16 @@ class CoworkersBase
                 return $coworker;
             }
         }
-        return false;
+        return $coworker;
     }
 
     public static function getCoworker(\WP_Post $post) : Coworker
     {
         return self::parseCoworker($post);
+    }
+
+    private function addImageSize()
+    {
+        add_image_size('coworker_image', 400, 600, $crop = true);
     }
 }

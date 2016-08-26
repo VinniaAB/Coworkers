@@ -18,7 +18,7 @@ defined('ABSPATH') or die('No script kiddies please!');
 add_action('init', function () {
     require_once __DIR__ . '/classes/CoworkersBase.php';
     $coworkers = new CoworkersBase();
-    $coworkers->registerPostType();
+    $coworkers->init();
 });
 
 
